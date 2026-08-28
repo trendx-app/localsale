@@ -22,7 +22,7 @@
 <div class="card">
   <div class="pin">📍</div>
   <h1 id="title">Opening LocalSale…</h1>
-  <p id="sub">Garage, yard and estate sales near you — on one map.</p>
+  <p id="sub">Real garage, yard and estate sales near you — including approved sales from city permit records. See the items before you drive over.</p>
   <a id="open" class="btn" href="#">Open in the app</a>
   <a id="ios" class="btn ghost" href="https://apps.apple.com/app/id6792212299">Get it on the App Store</a>
   <a id="android" class="btn ghost" href="https://play.google.com/store/apps/details?id=com.localsale.app&amp;referrer=utm_source%3Dshare%26utm_medium%3Dlink">Get it on Google Play</a>
@@ -52,6 +52,14 @@
   if (isIOS) document.getElementById('android').style.display = 'none';
   if (isAndroid) document.getElementById('ios').style.display = 'none';
   if (!isIOS && !isAndroid) { document.getElementById('title').textContent = 'LocalSale'; openBtn.style.display = 'none'; return; }
+  // ★`?sale=` 없이 들어온 방문 = 공유 링크가 아니라 **앱 소개 페이지**로 온 것(App Store 개발자
+  //   웹사이트·마케팅 URL 이 이 주소를 가리킨다). 이때 스토어로 자동 점프하면 소개를 읽을 새가 없고
+  //   마케팅 URL 로서도 부적절하다 → 버튼만 보여주고 멈춘다. 딥링크(공유 링크)일 때만 자동 전환.
+  if (!sale) {
+    document.getElementById('title').textContent = 'LocalSale';
+    openBtn.style.display = 'none';
+    return;
+  }
   if (isAndroid) { location.href = intentUrl; return; }
   var start = Date.now();
   var timer = setTimeout(function(){
